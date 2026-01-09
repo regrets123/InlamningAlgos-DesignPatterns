@@ -1,6 +1,7 @@
 ﻿#include "include/EventQueue.h"
+#include "include/Event.h"
 #include <stdlib.h>
-#include <string.h>
+
 
 struct EventQueue {
     Event* buffer;
@@ -21,12 +22,10 @@ EventQueue* queue_create(size_t capacity) {
         free(queue);
         return NULL;
     }
-    
     queue->capacity = capacity;
     queue->head = 0;
     queue->tail = 0;
     queue->count = 0;
-    
     return queue;
 }
 
@@ -70,23 +69,23 @@ bool queue_peek(const EventQueue* queue, Event* out_event) {
     return true;
 }
 
-bool eventqueue_is_empty(const EventQueue* queue) {
+bool queue_is_empty(const EventQueue* queue) {
     return queue && queue->count == 0;
 }
 
-bool eventqueue_is_full(const EventQueue* queue) {
+bool queue_is_full(const EventQueue* queue) {
     return queue && queue->count == queue->capacity;
 }
 
-size_t eventqueue_size(const EventQueue* queue) {
+size_t queue_size(const EventQueue* queue) {
     return queue ? queue->count : 0;
 }
 
-size_t eventqueue_capacity(const EventQueue* queue) {
+size_t queue_capacity(const EventQueue* queue) {
     return queue ? queue->capacity : 0;
 }
 
-void eventqueue_clear(EventQueue* queue) {
+void queue_clear(EventQueue* queue) {
     if (queue) {
         queue->head = 0;
         queue->tail = 0;

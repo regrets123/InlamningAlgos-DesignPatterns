@@ -1,8 +1,8 @@
 ﻿#ifndef INLAMNINGALGOS_DESIGNPATTERNS_EVENTLOG_H
 #define INLAMNINGALGOS_DESIGNPATTERNS_EVENTLOG_H
 #include <stddef.h>
+#include "include/Event.h"
 
-typedef struct Event Event;
 typedef struct EventLog EventLog;
 
 EventLog* log_create(size_t capacity);

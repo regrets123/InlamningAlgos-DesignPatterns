@@ -2,8 +2,7 @@
 #define INLAMNINGALGOS_DESIGNPATTERNS_EVENTQUEUE_H
 #include <stddef.h>
 #include <stdbool.h>
-
-typedef struct Event Event;
+#include "Event.h"
 
 typedef struct EventQueue EventQueue;
 

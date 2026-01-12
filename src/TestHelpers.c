@@ -1,5 +1,7 @@
-﻿#include "include/TestHelpers.h"
-#include <stdio.h>
+﻿#include <stdio.h>
+#include "include/TestHelpers.h"
+#include "include/EventLog.h"
+#include "include/EventQueue.h"
 
 void print_event(Event e) {
     const char* type_str[] = {"NONE", "TEMP", "BUTTON", "MOTION"};

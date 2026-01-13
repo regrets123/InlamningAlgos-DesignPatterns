@@ -1,7 +1,6 @@
 ﻿#ifndef INLAMNINGALGOS_DESIGNPATTERNS_EVENTLOG_H
 #define INLAMNINGALGOS_DESIGNPATTERNS_EVENTLOG_H
-#include <stddef.h>
-#include "include/Event.h"
+#include "Event.h"
 
 typedef struct EventLog EventLog;
 

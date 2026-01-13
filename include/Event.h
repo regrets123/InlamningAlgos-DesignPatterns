@@ -1,10 +1,10 @@
 ﻿//
 #ifndef INLAMNINGALGOS_DESIGNPATTERNS_EVENT_H
 #define INLAMNINGALGOS_DESIGNPATTERNS_EVENT_H
-enum type {NONE, TEMP, BUTTON, MOTION};
+enum type {NONE, TEMP, BUTTON, MOTION, MAXNUM};
 
 typedef struct Event {
-    int timeStamp;
+    time_t timeStamp;
     int sensorId;
     enum type type;
     int value;

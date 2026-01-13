@@ -1,5 +1,5 @@
-﻿#include "include/EventQueue.h"
-#include "include/Event.h"
+﻿#include "EventQueue.h"
+#include "Event.h"
 #include <stdlib.h>
 
 
@@ -30,21 +30,19 @@ EventQueue* queue_create(size_t capacity) {
 }
 
 void queue_destroy(EventQueue* queue) {
-    if (queue) {
+    if (queue) { //TODO double check this destruction, feels wrong to only call free on the buffer element.
         free(queue->buffer);
         free(queue);
     }
 }
 
-bool queue_enqueue(EventQueue* queue, Event event) {
+bool queue_enqueue(EventQueue* queue, const Event* event) {
     if (!queue || queue_is_full(queue)) {
         return false;
     }
-    
-    queue->buffer[queue->head] = event;
+    queue->buffer[queue->head] = *event;
     queue->head = (queue->head + 1) % queue->capacity;
     queue->count++;
-    
     return true;
 }
 
@@ -86,7 +84,7 @@ size_t queue_capacity(const EventQueue* queue) {
 }
 
 void queue_clear(EventQueue* queue) {
-    if (queue) {
+    if (queue) { //TODO also looks wrong.
         queue->head = 0;
         queue->tail = 0;
         queue->count = 0;

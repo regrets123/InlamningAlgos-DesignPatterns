@@ -9,7 +9,7 @@ typedef struct EventQueue EventQueue;
 EventQueue* queue_create(size_t capacity);
 void queue_destroy(EventQueue* queue);
 
-bool queue_enqueue(EventQueue* queue, Event event);
+bool queue_enqueue(EventQueue* queue, const Event* event);
 bool queue_dequeue(EventQueue* queue, Event* out_event);
 bool queue_peek(const EventQueue* queue, Event* out_event);
 

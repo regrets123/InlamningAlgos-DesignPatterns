@@ -1,6 +1,6 @@
-﻿#include "include/Eventlog.h"
-#include "include/Event.h"
-#include <stdlib.h>
+﻿#include <stdlib.h>
+#include "EventLog.h"
+#include "Event.h"
 
 struct EventLog {
     Event* events;

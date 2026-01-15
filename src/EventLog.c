@@ -11,7 +11,7 @@ struct EventLog {
 EventLog* log_create(size_t capacity) {
     EventLog* log = malloc(sizeof(EventLog));
     if (!log) return NULL;
-    log->events = malloc(capacity * sizeof(Event));
+    log->events = malloc(capacity * sizeof(Event*));
     if (!log->events) {
         free(log);
         return NULL;

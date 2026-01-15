@@ -4,11 +4,11 @@
 
 
 struct EventQueue {
-    Event* buffer;
+    Event** buffer;
     size_t capacity;
     size_t head;      // Index where next item will be written
     size_t tail;      // Index where next item will be read
-    size_t count;     // Number of items currently in queue
+    size_t count;
 };
 
 EventQueue* queue_create(size_t capacity) {
@@ -17,7 +17,7 @@ EventQueue* queue_create(size_t capacity) {
     EventQueue* queue = malloc(sizeof(EventQueue));
     if (!queue) return NULL;
     
-    queue->buffer = malloc(sizeof(Event) * capacity);
+    queue->buffer = malloc(sizeof(Event*) * capacity);
     if (!queue->buffer) {
         free(queue);
         return NULL;
@@ -30,7 +30,11 @@ EventQueue* queue_create(size_t capacity) {
 }
 
 void queue_destroy(EventQueue* queue) {
-    if (queue) { //TODO double check this destruction, feels wrong to only call free on the buffer element.
+    if (queue) {
+        for (size_t i = 0; i < queue->count; i++) {
+            size_t index = (queue->tail + i) % queue->capacity;
+            free(queue->buffer[index]);
+        }
         free(queue->buffer);
         free(queue);
     }

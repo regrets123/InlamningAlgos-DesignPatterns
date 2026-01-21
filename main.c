@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
+#include "EventConsumer.h"
 #include "EventProducer.h"
 #include "TestHelpers.h"
 
 int main() {
     srand(time(NULL));
-    if (!ensureQueueInitialized()) {
+    if (!ensureQueueInitialized() || !ensureLogInitialized()) {
         return 1;
     }
     tick(10);

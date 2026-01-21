@@ -3,7 +3,7 @@
 #include "Event.h"
 
 struct EventLog {
-    Event* events;
+    const Event** events;
     size_t size;
     size_t capacity;
 };
@@ -25,38 +25,33 @@ size_t log_size(const EventLog* log) {
     return log ? log->size : 0;
 }
 
-Event log_Get(const EventLog* log, int index) {
-    Event error_event = {0, 0, NONE, 0};
-
+const Event* log_Get(const EventLog* log, int index) {
     if (!log || index < 0 || (size_t)index >= log->size) {
-        return error_event;
+        return NULL ;
     }
     return log->events[index];
 }
 
-void log_append(EventLog* log, Event e) {
+void log_append(EventLog* log, const Event* e) {
     if (!log) return;
 
     if (log->size >= log->capacity) {
         size_t new_capacity = log->capacity * 2;
-        Event* new_events = realloc(log->events, new_capacity * sizeof(Event));
-
+        const Event** new_events = realloc(log->events, new_capacity * sizeof(const Event*));
         if (!new_events) {
             return;
         }
         log->events = new_events;
         log->capacity = new_capacity;
     }
-
     log->events[log->size] = e;
     log->size++;
 }
 
-void log_set(EventLog* log, int index, Event e) {
+void log_set(EventLog* log, int index, Event* e) {
     if (!log || index < 0 || (size_t)index >= log->size) {
         return;
     }
-
     log->events[index] = e;
 }
 

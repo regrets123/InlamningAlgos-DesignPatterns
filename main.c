@@ -11,11 +11,10 @@ int main() {
     if (!ensureQueueInitialized() || !ensureLogInitialized()) {
         return 1;
     }
-    tick(10);
     test_eventLog();
     test_eventQueue();
     printf("All tests completed!\n");
-
+    tick(10);
     queue_destroy(queue);
     free(queue);
     return 0;

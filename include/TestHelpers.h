@@ -4,7 +4,7 @@
 #include "Event.h"
 
 // Helper function to print an event
-void print_event(Event e);
+void print_event(const Event* e);
 
 // Test functions
 void test_eventLog();

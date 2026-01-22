@@ -7,7 +7,7 @@ void consumeEvent(EventQueue* queue) {
 
 bool ensureLogInitialized() {
     if (log == NULL) {
-        log = log_create();
+        log = log_create(50);
     }
     return log != NULL;
 }

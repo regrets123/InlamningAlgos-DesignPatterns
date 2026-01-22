@@ -1,6 +1,8 @@
 ﻿//
 #ifndef INLAMNINGALGOS_DESIGNPATTERNS_EVENT_H
 #define INLAMNINGALGOS_DESIGNPATTERNS_EVENT_H
+
+#include <time.h>
 enum type {NONE, TEMP, BUTTON, MOTION, MAXNUM};
 
 typedef struct Event {

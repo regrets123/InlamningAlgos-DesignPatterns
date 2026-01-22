@@ -4,6 +4,7 @@
 #include "Event.h"
 #include "EventConsumer.h"
 #include "EventLog.h"
+#include "TestHelpers.h"
 
 bool ensureQueueInitialized() {
     if (queue == NULL) {
@@ -33,9 +34,11 @@ void tick(int iterations) {
         int randomValue = rand() % 1000;
         *newEvent = createEvent(time(NULL), eventCount++,randomType,randomValue);
         queue_enqueue(queue, newEvent);
+        print_event(newEvent);
     }
     for (int i = 0; i < iterations; i++) {
-
-        log_append(log, queue_dequeue(queue));
+        const Event* fromQueue = queue_dequeue(queue);
+        log_append(log, fromQueue);
+        print_event(fromQueue);
     }
 }

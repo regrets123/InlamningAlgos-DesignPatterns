@@ -2,11 +2,15 @@
 #define INLAMNINGALGOS_DESIGNPATTERNS_USERINTERFACE_H
 #include <stdbool.h>
 
-typedef enum menuOptions {none, tick, print, sort, find, help, test, exit, maxNum}
+typedef enum menuOptions {none, tick, print, sort, find, help, test, quit, maxNum}
 menuOptions;
 
-void PrintMenu();
-void HandleUserInput(menuOptions option);
-bool InterfaceLoop();
+static menuOptions currentOption = none;
+
+void printMenu();
+int readInput();
+bool readValidInt(const char *input, int *result);
+void handleUserInput(menuOptions option);
+bool interfaceLoop();
 
 #endif //INLAMNINGALGOS_DESIGNPATTERNS_USERINTERFACE_H

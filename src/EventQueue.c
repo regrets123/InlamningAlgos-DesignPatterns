@@ -88,3 +88,11 @@ void queue_clear(EventQueue* queue) {
         queue->count = 0;
     }
 }
+
+const Event* queue_get(const EventQueue* queue, size_t index) {
+    if (!queue || index >= queue->count) {
+        return NULL;
+    }
+    size_t actualIndex = (queue->tail + index) % queue->capacity;
+    return queue->buffer[actualIndex];
+}

@@ -55,6 +55,15 @@ void log_set(EventLog* log, int index, Event* e) {
     log->events[index] = e;
 }
 
+void log_swap(EventLog* log, int i, int j) {
+    if (!log || i < 0 || j < 0 || (size_t)i >= log->size || (size_t)j >= log->size) {
+        return;
+    }
+    const Event* temp = log->events[i];
+    log->events[i] = log->events[j];
+    log->events[j] = temp;
+}
+
 void log_destroy(EventLog* log) {
     if (!log) return;
 

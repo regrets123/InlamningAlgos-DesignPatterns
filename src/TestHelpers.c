@@ -1,7 +1,9 @@
 ﻿#include <stdio.h>
+#include <stdbool.h>
 #include "TestHelpers.h"
 #include "EventLog.h"
 #include "EventQueue.h"
+#include "EventSort.h"
 
 void print_event(const Event* e) {
     const char* type_str[] = {"NONE", "TEMP", "BUTTON", "MOTION"};
@@ -347,4 +349,247 @@ void test_eventQueue() {
     passed++;
 
     printf("\nEventQueue Results: %d passed, %d failed\n", passed, failed);
+}
+
+void test_eventSort() {
+    printf("\n=== EventSort Tests ===\n");
+    int passed = 0;
+    int failed = 0;
+
+    // Create test events with different values for sorting
+    Event e1 = {300, 5, TEMP, 25};
+    Event e2 = {100, 2, BUTTON, 50};
+    Event e3 = {200, 8, MOTION, 10};
+    Event e4 = {400, 1, TEMP, 75};
+    Event e5 = {150, 3, NONE, 30};
+
+    // Test InsertionSort by timestamp
+    printf("Test 1: InsertionSort by timestamp... ");
+    EventLog* log1 = log_create(10);
+    log_append(log1, &e1);
+    log_append(log1, &e2);
+    log_append(log1, &e3);
+    log_append(log1, &e4);
+    log_append(log1, &e5);
+    insertionSort(log1, compareByTimestamp);
+    bool sorted = true;
+    for (size_t i = 1; i < log_size(log1); i++) {
+        if (log_Get(log1, (int)(i-1))->timeStamp > log_Get(log1, (int)i)->timeStamp) {
+            sorted = false;
+            break;
+        }
+    }
+    if (sorted) {
+        printf("PASSED\n");
+        passed++;
+    } else {
+        printf("FAILED\n");
+        failed++;
+    }
+    log_destroy(log1);
+
+    // Test SelectionSort by sensorId
+    printf("Test 2: SelectionSort by sensorId... ");
+    EventLog* log2 = log_create(10);
+    log_append(log2, &e1);
+    log_append(log2, &e2);
+    log_append(log2, &e3);
+    log_append(log2, &e4);
+    log_append(log2, &e5);
+    selectionSort(log2, compareBySensorId);
+    sorted = true;
+    for (size_t i = 1; i < log_size(log2); i++) {
+        if (log_Get(log2, (int)(i-1))->sensorId > log_Get(log2, (int)i)->sensorId) {
+            sorted = false;
+            break;
+        }
+    }
+    if (sorted) {
+        printf("PASSED\n");
+        passed++;
+    } else {
+        printf("FAILED\n");
+        failed++;
+    }
+    log_destroy(log2);
+
+    // Test BubbleSort by value
+    printf("Test 3: BubbleSort by value... ");
+    EventLog* log3 = log_create(10);
+    log_append(log3, &e1);
+    log_append(log3, &e2);
+    log_append(log3, &e3);
+    log_append(log3, &e4);
+    log_append(log3, &e5);
+    bubbleSort(log3, compareByValue);
+    sorted = true;
+    for (size_t i = 1; i < log_size(log3); i++) {
+        if (log_Get(log3, (int)(i-1))->value > log_Get(log3, (int)i)->value) {
+            sorted = false;
+            break;
+        }
+    }
+    if (sorted) {
+        printf("PASSED\n");
+        passed++;
+    } else {
+        printf("FAILED\n");
+        failed++;
+    }
+    log_destroy(log3);
+
+    // Test sortLog HOF with InsertionSort
+    printf("Test 4: sortLog HOF with InsertionSort... ");
+    EventLog* log4 = log_create(10);
+    log_append(log4, &e1);
+    log_append(log4, &e2);
+    log_append(log4, &e3);
+    log_append(log4, &e4);
+    log_append(log4, &e5);
+    sortLog(log4, insertionSort, compareByType);
+    sorted = true;
+    for (size_t i = 1; i < log_size(log4); i++) {
+        if (log_Get(log4, (int)(i-1))->type > log_Get(log4, (int)i)->type) {
+            sorted = false;
+            break;
+        }
+    }
+    if (sorted) {
+        printf("PASSED\n");
+        passed++;
+    } else {
+        printf("FAILED\n");
+        failed++;
+    }
+    log_destroy(log4);
+
+    // Test sortLog HOF with SelectionSort
+    printf("Test 5: sortLog HOF with SelectionSort... ");
+    EventLog* log5 = log_create(10);
+    log_append(log5, &e1);
+    log_append(log5, &e2);
+    log_append(log5, &e3);
+    log_append(log5, &e4);
+    log_append(log5, &e5);
+    sortLog(log5, selectionSort, compareByTimestamp);
+    sorted = true;
+    for (size_t i = 1; i < log_size(log5); i++) {
+        if (log_Get(log5, (int)(i-1))->timeStamp > log_Get(log5, (int)i)->timeStamp) {
+            sorted = false;
+            break;
+        }
+    }
+    if (sorted) {
+        printf("PASSED\n");
+        passed++;
+    } else {
+        printf("FAILED\n");
+        failed++;
+    }
+    log_destroy(log5);
+
+    // Test sortLog HOF with BubbleSort
+    printf("Test 6: sortLog HOF with BubbleSort... ");
+    EventLog* log6 = log_create(10);
+    log_append(log6, &e1);
+    log_append(log6, &e2);
+    log_append(log6, &e3);
+    log_append(log6, &e4);
+    log_append(log6, &e5);
+    sortLog(log6, bubbleSort, compareBySensorId);
+    sorted = true;
+    for (size_t i = 1; i < log_size(log6); i++) {
+        if (log_Get(log6, (int)(i-1))->sensorId > log_Get(log6, (int)i)->sensorId) {
+            sorted = false;
+            break;
+        }
+    }
+    if (sorted) {
+        printf("PASSED\n");
+        passed++;
+    } else {
+        printf("FAILED\n");
+        failed++;
+    }
+    log_destroy(log6);
+
+    // Test empty log
+    printf("Test 7: Sort empty log... ");
+    EventLog* log7 = log_create(10);
+    insertionSort(log7, compareByTimestamp);
+    if (log_size(log7) == 0) {
+        printf("PASSED\n");
+        passed++;
+    } else {
+        printf("FAILED\n");
+        failed++;
+    }
+    log_destroy(log7);
+
+    // Test single element log
+    printf("Test 8: Sort single element log... ");
+    EventLog* log8 = log_create(10);
+    log_append(log8, &e1);
+    selectionSort(log8, compareByTimestamp);
+    if (log_size(log8) == 1 && log_Get(log8, 0) == &e1) {
+        printf("PASSED\n");
+        passed++;
+    } else {
+        printf("FAILED\n");
+        failed++;
+    }
+    log_destroy(log8);
+
+    // Test NULL handling
+    printf("Test 9: Sort NULL log... ");
+    insertionSort(NULL, compareByTimestamp);
+    selectionSort(NULL, compareBySensorId);
+    bubbleSort(NULL, compareByValue);
+    sortLog(NULL, insertionSort, compareByTimestamp);
+    printf("PASSED (no crash)\n");
+    passed++;
+
+    // Test NULL comparator
+    printf("Test 10: Sort with NULL comparator... ");
+    EventLog* log10 = log_create(10);
+    log_append(log10, &e1);
+    log_append(log10, &e2);
+    insertionSort(log10, NULL);
+    selectionSort(log10, NULL);
+    bubbleSort(log10, NULL);
+    sortLog(log10, insertionSort, NULL);
+    printf("PASSED (no crash)\n");
+    passed++;
+    log_destroy(log10);
+
+    // Test NULL sort function in HOF
+    printf("Test 11: sortLog with NULL sort function... ");
+    EventLog* log11 = log_create(10);
+    log_append(log11, &e1);
+    sortLog(log11, NULL, compareByTimestamp);
+    printf("PASSED (no crash)\n");
+    passed++;
+    log_destroy(log11);
+
+    // Test pointer stability (verify only pointers moved, not data)
+    printf("Test 12: Pointer stability... ");
+    EventLog* log12 = log_create(10);
+    log_append(log12, &e1);
+    log_append(log12, &e2);
+    log_append(log12, &e3);
+    insertionSort(log12, compareByTimestamp);
+    // After sort by timestamp, order should be: e2(100), e3(200), e1(300)
+    bool pointersCorrect = (log_Get(log12, 0) == &e2) &&
+                           (log_Get(log12, 1) == &e3) &&
+                           (log_Get(log12, 2) == &e1);
+    if (pointersCorrect) {
+        printf("PASSED\n");
+        passed++;
+    } else {
+        printf("FAILED\n");
+        failed++;
+    }
+    log_destroy(log12);
+
+    printf("\nEventSort Results: %d passed, %d failed\n", passed, failed);
 }

@@ -9,5 +9,6 @@ void print_event(const Event* e);
 // Test functions
 void test_eventLog();
 void test_eventQueue();
+void test_eventSort();
 
 #endif //INLAMNINGALGOS_DESIGNPATTERNS_TESTHELPERS_H

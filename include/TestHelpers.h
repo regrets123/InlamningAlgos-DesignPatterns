@@ -10,5 +10,6 @@ void print_event(const Event* e);
 void test_eventLog();
 void test_eventQueue();
 void test_eventSort();
+void test_eventPoolRebase();
 
 #endif //INLAMNINGALGOS_DESIGNPATTERNS_TESTHELPERS_H

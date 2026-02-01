@@ -1,6 +1,7 @@
 ﻿#ifndef INLAMNINGALGOS_DESIGNPATTERNS_EVENTLOG_H
 #define INLAMNINGALGOS_DESIGNPATTERNS_EVENTLOG_H
 
+#include <stddef.h>
 #include "Event.h"
 
 typedef struct EventLog EventLog;
@@ -12,5 +13,6 @@ void log_destroy(EventLog* log);
 void log_append(EventLog* log, const Event* e);
 void log_set(EventLog* log, int index, Event* e);
 void log_swap(EventLog* log, int i, int j);
+void log_rebase(EventLog* log, ptrdiff_t delta);
 
 #endif //INLAMNINGALGOS_DESIGNPATTERNS_EVENTLOG_H

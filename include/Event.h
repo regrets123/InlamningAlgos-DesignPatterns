@@ -3,7 +3,7 @@
 #define INLAMNINGALGOS_DESIGNPATTERNS_EVENT_H
 
 #include <time.h>
-enum type {NONE, TEMP, BUTTON, MOTION, MAXNUM};
+enum type {NONE, TEMP, BUTTON, MOTION, MAXTYPE};
 
 typedef struct Event {
     time_t timeStamp;

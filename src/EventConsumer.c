@@ -1,13 +1,8 @@
 ﻿//
 #include "EventConsumer.h"
+#include "AppState.h"
 
 void consumeEvent(EventQueue* queue) {
-    log_append(log, queue_dequeue(queue));
-}
-
-bool ensureLogInitialized() {
-    if (log == NULL) {
-        log = log_create(50);
-    }
-    return log != NULL;
+    const Event* toLog = queue_dequeue(queue);
+    log_append(appState_get()->log, toLog);
 }

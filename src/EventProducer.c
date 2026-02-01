@@ -3,15 +3,8 @@
 #include "EventProducer.h"
 #include "Event.h"
 #include "EventConsumer.h"
-#include "EventLog.h"
 #include "TestHelpers.h"
-
-bool ensureQueueInitialized() {
-    if (queue == NULL) {
-        queue = queue_create(queueInitCapacity);
-    }
-    return queue != NULL;
-}
+#include "AppState.h"
 
 Event createEvent(time_t timestamp, int sensorId, enum type type, int value) {
     Event e;
@@ -23,22 +16,32 @@ Event createEvent(time_t timestamp, int sensorId, enum type type, int value) {
 }
 
 void tick(int iterations) {
-    if (eventPoolSize + iterations > eventPoolCapacity) {
-        eventPoolCapacity = (eventPoolCapacity == 0) ? iterations : eventPoolCapacity * 2;
-        eventPool = realloc(eventPool, sizeof(Event) * eventPoolCapacity);
+    AppState* state = appState_get();
+
+    if (state->eventPoolSize + iterations > state->eventPoolCapacity) {
+        state->eventPoolCapacity = (state->eventPoolCapacity == 0) ? iterations : state->eventPoolCapacity * 2;
+        Event* oldPool = state->eventPool;
+        state->eventPool = realloc(state->eventPool, sizeof(Event) * state->eventPoolCapacity);
+        if (oldPool != NULL && state->eventPool != oldPool) {
+            ptrdiff_t delta = (char*)state->eventPool - (char*)oldPool;
+            log_rebase(state->log, delta);
+        }
     }
 
     for (int i = 0; i < iterations; i++) {
-        Event* newEvent = &eventPool[eventPoolSize++];
-        enum type randomType = NONE + 1 + rand() % (MAXNUM - 1);
+        Event* newEvent = &state->eventPool[state->eventPoolSize++];
+        enum type randomType = NONE + 1 + rand() % (MAXTYPE - 1);
         int randomValue = rand() % 1000;
-        *newEvent = createEvent(time(NULL), eventCount++,randomType,randomValue);
-        queue_enqueue(queue, newEvent);
+        *newEvent = createEvent(rewindTime(time(NULL),i), state->eventCount++,randomType,randomValue);
+        queue_enqueue(state->queue, newEvent);
         print_event(newEvent);
     }
     for (int i = 0; i < iterations; i++) {
-        const Event* fromQueue = queue_dequeue(queue);
-        log_append(log, fromQueue);
-        print_event(fromQueue);
+        consumeEvent(state->queue);
     }
+}
+
+time_t rewindTime(time_t time, int seconds)
+{
+    return time - seconds;
 }

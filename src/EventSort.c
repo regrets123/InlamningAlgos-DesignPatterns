@@ -1,5 +1,6 @@
 #include "EventSort.h"
 #include <stdbool.h>
+#include <stdlib.h>
 
 void insertionSort(EventLog* log, EventComparator cmp) {
     if (!log || !cmp) return;
@@ -70,6 +71,17 @@ int compareByValue(const Event* a, const Event* b) {
 int compareByType(const Event* a, const Event* b) {
     if (!a || !b) return 0;
     return (int)a->type - (int)b->type;
+}
+
+void shuffleLog(EventLog* log) {
+    if (!log) return;
+    size_t n = log_size(log);
+    if (n <= 1) return;
+
+    for (size_t i = n - 1; i > 0; i--) {
+        size_t j = rand() % (i + 1);
+        log_swap(log, (int)i, (int)j);
+    }
 }
 
 void sortLog(EventLog* log, SortFunction sortFn, EventComparator cmp) {

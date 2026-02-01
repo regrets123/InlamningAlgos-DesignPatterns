@@ -1,22 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "EventConsumer.h"
-#include "EventProducer.h"
 #include "UserInterface.h"
+#include "AppState.h"
 
 int main() {
     srand(time(NULL));
-    if (!ensureQueueInitialized() || !ensureLogInitialized()) {
+    if (!appState_get()) {
         return 1;
     }
-    while (currentOption != quit)
+    while (appState_get()->currentOption != quit)
     {
         printMenu();
         const int input = readInput();
         handleUserInput(input);
     }
-    queue_destroy(queue);
-    free(queue);
+    appState_destroy();
     return 0;
 }

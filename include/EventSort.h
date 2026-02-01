@@ -17,6 +17,7 @@ int compareBySensorId(const Event* a, const Event* b);
 int compareByValue(const Event* a, const Event* b);
 int compareByType(const Event* a, const Event* b);
 
+void shuffleLog(EventLog* log);
 void sortLog(EventLog* log, SortFunction sortFn, EventComparator cmp);
 
 #endif //INLAMNINGALGOS_DESIGNPATTERNS_EVENTSORT_H

@@ -33,7 +33,7 @@ const Event* log_Get(const EventLog* log, int index) {
 }
 
 void log_append(EventLog* log, const Event* e) {
-    if (!log) return;
+    if (!log || !e) return;
 
     if (log->size >= log->capacity) {
         size_t new_capacity = log->capacity * 2;
@@ -62,6 +62,13 @@ void log_swap(EventLog* log, int i, int j) {
     const Event* temp = log->events[i];
     log->events[i] = log->events[j];
     log->events[j] = temp;
+}
+
+void log_rebase(EventLog* log, ptrdiff_t delta) {
+    if (!log || delta == 0) return;
+    for (size_t i = 0; i < log->size; i++) {
+        log->events[i] = (const Event*)((const char*)log->events[i] + delta);
+    }
 }
 
 void log_destroy(EventLog* log) {

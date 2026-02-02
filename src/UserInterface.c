@@ -60,22 +60,7 @@ int readInput() {
 void handleUserInput(menuOptions option) {
     switch (option) {
         case tickState: {
-                printf("Input how many tics, must be higher than 1, will be capped at 200.\n");
-                int input = -1;
-                while (input < 0 )
-                {
-                    input = readInput();
-                    if (readInput() > 200 )
-                    {
-                        input = 200;
-                        printf("Input set to 200.\n");
-                    }
-                    else if (readInput() < 1)
-                    {
-                        printf("Input set to 1.\n");
-                    }
-                }
-                tick(input);
+                tick(selectTickState());
             break;
         }
         case printState: {
@@ -91,7 +76,6 @@ void handleUserInput(menuOptions option) {
                 int chosenSort = handleSortInput();
                 int chosenComparator = selectComparator();
                 startSorting(chosenSort, chosenComparator);
-
             break;
         }
         case find: {
@@ -114,7 +98,10 @@ void handleUserInput(menuOptions option) {
             break;
         }
         case help: {
-            break;
+                printf("Select what comparator to check if the log is sorted by:\n");
+                int cmp = selectComparator();
+                printf("Log is sorted: %s\n", checkSortWithComp(cmp) ? "YES" : "NO");
+                break;
         }
         case test: {
                 test_eventLog();
@@ -133,18 +120,37 @@ void handleUserInput(menuOptions option) {
     }
 }
 
+int selectTickState(){
+    printf("Input how many tics, must be higher than 1, will be capped at 200.\n");
+    int input = -1;
+    while (input < 0 )
+    {
+        input = readInput();
+        if (input > 200 )
+        {
+            input = 200;
+            printf("Input set to 200.\n");
+        }
+        else if (input < 1)
+        {
+            printf("Input set to 1.\n");
+        }
+    }
+    return input;
+}
+
 int handleSortInput(){
     printf("Input what sorting option you want to use. 1: BubbleSort, 2: SelectionSort, 3:InsertionSort.");
     int input =  -1;
     while (input < 1)
     {
         input = readInput();
-        if (readInput() > 3 )
+        if (input > 3 )
         {
             input = -1;
             printf("Invalid input, please enter a value between 1-3.\n");
         }
-        else if (readInput() < 1)
+        else if (input < 1)
         {
             printf("Invalid input, please enter a value between 1-3.\n");
         }
@@ -158,12 +164,12 @@ int selectComparator(){
     while (input < 1)
     {
         input = readInput();
-        if (readInput() > 4 )
+        if (input > 4 )
         {
             input = -1;
             printf("Invalid input, please enter a value between 1-4.\n");
         }
-        else if (readInput() < 1)
+        else if (input < 1)
         {
             printf("Invalid input, please enter a value between 1-4.\n");
         }
@@ -217,6 +223,35 @@ void startSorting(int chosenSort, int chosenComparator)
         }
     }
     sortLog(appState_get()->log, sortFn, cmp);
+}
+
+bool checkSortWithComp(int chosenComparator)
+{
+    EventComparator cmp = NULL;
+    switch ((comparatorOptions)chosenComparator) {
+    case byTimestamp: {
+                cmp = compareByTimestamp;
+                break;
+        }
+        case bySensorId: {
+                cmp = compareBySensorId;
+                break;
+        }
+        case byValue: {
+                cmp = compareByValue;
+                break;
+        }
+        case byType: {
+                cmp = compareByType;
+                break;
+        }
+        default: {
+                printf("Invalid comparator option.\n");
+                return false;
+        }
+    }
+
+    return isSorted(appState_get()->log, cmp);
 }
 
 bool interfaceLoop() {

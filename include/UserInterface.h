@@ -14,8 +14,10 @@ int readInput();
 bool readValidInt(const char *input, int *result);
 void handleUserInput(menuOptions option);
 int handleSortInput();
+int selectTickState();
 int selectComparator();
 void startSorting(int chosenSort, int chosenComparator);
+bool checkSortWithComp(int chosenComparator);
 bool interfaceLoop();
 
 #endif //INLAMNINGALGOS_DESIGNPATTERNS_USERINTERFACE_H

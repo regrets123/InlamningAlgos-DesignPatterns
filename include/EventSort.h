@@ -3,6 +3,7 @@
 
 #include "EventLog.h"
 #include "Event.h"
+#include <stdbool.h>
 
 typedef int (*EventComparator)(const Event* a, const Event* b);
 
@@ -16,6 +17,7 @@ int compareByTimestamp(const Event* a, const Event* b);
 int compareBySensorId(const Event* a, const Event* b);
 int compareByValue(const Event* a, const Event* b);
 int compareByType(const Event* a, const Event* b);
+bool isSorted(EventLog* log, EventComparator cmp);
 
 void shuffleLog(EventLog* log);
 void sortLog(EventLog* log, SortFunction sortFn, EventComparator cmp);

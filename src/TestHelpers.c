@@ -159,6 +159,18 @@ void test_eventLog() {
     log_destroy(NULL);
     printf("PASSED (no crash)\n");
     passed++;
+
+    printf("Test 15: log_create zero capacity... ");
+    EventLog* zero_log = log_create(0);
+    if (zero_log == NULL) {
+        printf("PASSED\n");
+        passed++;
+    } else {
+        printf("FAILED (should return NULL)\n");
+        log_destroy(zero_log);
+        failed++;
+    }
+
     printf("\nEventLog Results: %d passed, %d failed\n", passed, failed);
 }
 
@@ -464,9 +476,57 @@ void test_eventSort() {
     int passed = 0;
     int failed = 0;
 
+    // --- Empty log safety tests ---
+    printf("--- Empty log safety tests ---\n");
+    EventLog* emptyLog = log_create(4);
+    int testNum = 1;
+
+    printf("Test %d: isSorted on empty log... ", testNum);
+    if (isSorted(emptyLog, compareByTimestamp)) {
+        printf("PASSED\n");
+        passed++;
+    } else {
+        printf("FAILED (should return true)\n");
+        failed++;
+    }
+    testNum++;
+
+    printf("Test %d: shuffleLog on empty log... ", testNum);
+    shuffleLog(emptyLog);
+    printf("PASSED (no crash)\n");
+    passed++;
+    testNum++;
+
+    printf("Test %d: bubbleSort on empty log... ", testNum);
+    bubbleSort(emptyLog, compareByTimestamp);
+    printf("PASSED (no crash)\n");
+    passed++;
+    testNum++;
+
+    printf("Test %d: selectionSort on empty log... ", testNum);
+    selectionSort(emptyLog, compareByTimestamp);
+    printf("PASSED (no crash)\n");
+    passed++;
+    testNum++;
+
+    printf("Test %d: insertionSort on empty log... ", testNum);
+    insertionSort(emptyLog, compareByTimestamp);
+    printf("PASSED (no crash)\n");
+    passed++;
+    testNum++;
+
+    printf("Test %d: sortLog on empty log... ", testNum);
+    sortLog(emptyLog, bubbleSort, compareByTimestamp);
+    printf("PASSED (no crash)\n");
+    passed++;
+    testNum++;
+
+    log_destroy(emptyLog);
+
+    // --- Sort algorithm tests with random data ---
     srand((unsigned)time(NULL));
     int numEvents = rand() % 91 + 10;
-    printf("Generating %d random events with tick...\n", numEvents);
+    printf("\nGenerating %d random events with tick...\n", numEvents);
 
     appState_get();
     tick(numEvents);
@@ -479,7 +539,6 @@ void test_eventSort() {
     EventComparator comparators[] = {compareByTimestamp, compareBySensorId, compareByValue, compareByType};
     const char* compNames[] = {"Timestamp", "SensorId", "Value", "Type"};
 
-    int testNum = 1;
     EventLog* sortTestLog = appState_get()->log;
     for (int s = sort_bubble; s <= sort_insertion; s++) {
         for (int c = byTimestamp; c <= byType; c++) {

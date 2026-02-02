@@ -73,6 +73,22 @@ int compareByType(const Event* a, const Event* b) {
     return (int)a->type - (int)b->type;
 }
 
+bool isSorted(EventLog* log, EventComparator cmp)
+{
+    if (!log || log_size(log) <= 1) {
+        return true;
+    }
+
+    size_t n = log_size(log);
+    for (size_t i = 0; i < n - 1; i++) {
+        if (cmp(log_Get(log, i), log_Get(log, i + 1)) > 0) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void shuffleLog(EventLog* log) {
     if (!log) return;
     size_t n = log_size(log);

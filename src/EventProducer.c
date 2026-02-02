@@ -1,5 +1,6 @@
 ﻿//
 #include <stdlib.h>
+#include <stdio.h>
 #include "EventProducer.h"
 #include "Event.h"
 #include "EventConsumer.h"
@@ -18,13 +19,18 @@ void tick(int iterations) {
     AppState* state = appState_get();
 
     if (state->eventPoolSize + iterations > state->eventPoolCapacity) {
-        state->eventPoolCapacity = (state->eventPoolCapacity == 0) ? iterations : state->eventPoolCapacity * 2;
-        Event* oldPool = state->eventPool;
-        state->eventPool = realloc(state->eventPool, sizeof(Event) * state->eventPoolCapacity);
-        if (oldPool != NULL && state->eventPool != oldPool) {
-            ptrdiff_t delta = (char*)state->eventPool - (char*)oldPool;
+        size_t newCapacity = (state->eventPoolCapacity == 0) ? iterations : state->eventPoolCapacity * 2;
+        Event* newPool = realloc(state->eventPool, sizeof(Event) * newCapacity);
+        if (!newPool) {
+            printf("Pool realloc failed, keeping current capacity of %zu.\n", state->eventPoolCapacity);
+            return;
+        }
+        if (state->eventPool != NULL && newPool != state->eventPool) {
+            ptrdiff_t delta = (char*)newPool - (char*)state->eventPool;
             log_rebase(state->log, delta);
         }
+        state->eventPool = newPool;
+        state->eventPoolCapacity = newCapacity;
     }
 
     int produced = 0;

@@ -27,16 +27,19 @@ void tick(int iterations) {
         }
     }
 
-    for (int i = 0; i < iterations; i++) {
-        Event* newEvent = &state->eventPool[state->eventPoolSize++];
-        enum type randomType = NONE + 1 + rand() % (MAXTYPE - 1);
-        int randomValue = rand() % 1000;
-        *newEvent = createEvent(rewindTime(time(NULL),i), state->eventCount++,randomType,randomValue);
-        queue_enqueue(state->queue, newEvent);
-        print_event(newEvent);
-    }
-    for (int i = 0; i < iterations; i++) {
-        consumeEvent(state->queue);
+    int produced = 0;
+    while (produced < iterations) {
+        while (produced < iterations && !queue_is_full(state->queue)) {
+            Event* newEvent = &state->eventPool[state->eventPoolSize++];
+            enum type randomType = NONE + 1 + rand() % (MAXTYPE - 1);
+            int randomValue = rand() % 1000;
+            *newEvent = createEvent(rewindTime(time(NULL), produced), state->eventCount++, randomType, randomValue);
+            queue_enqueue(state->queue, newEvent);
+            produced++;
+        }
+        while (!queue_is_empty(state->queue)) {
+            consumeEvent(state->queue);
+        }
     }
 }
 

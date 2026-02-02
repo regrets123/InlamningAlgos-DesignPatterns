@@ -1,6 +1,7 @@
 #include "UserInterface.h"
 #include "EventProducer.h"
 #include "EventSort.h"
+#include "Event.h"
 #include "AppState.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -131,7 +132,7 @@ int selectTickState(){
 }
 
 int handleSortInput(){
-    printf("Input what sorting option you want to use. 1: BubbleSort, 2: SelectionSort, 3:InsertionSort.");
+    printf("Input what sorting option you want to use. 1: BubbleSort, 2: SelectionSort, 3:InsertionSort.\n");
     int input =  -1;
     while (input < 1)
     {
@@ -150,7 +151,7 @@ int handleSortInput(){
 }
 
 int selectComparator(){
-    printf("Input what comparator you want to use. 1: Timestamp, 2: SensorId, 3: Value, 4: Type.");
+    printf("Input what comparator you want to use. 1:Timestamp, 2:SensorId, 3:Value, 4:Type.\n");
     int input =  -1;
     while (input < 1)
     {

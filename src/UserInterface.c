@@ -1,7 +1,6 @@
 #include "UserInterface.h"
 #include "EventProducer.h"
 #include "EventSort.h"
-#include "TestHelpers.h"
 #include "AppState.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,8 +36,7 @@ void printMenu() {
     printf("3. Sort\n");
     printf("4. Find\n");
     printf("5. Help\n");
-    printf("6. Test\n");
-    printf("7. Quit\n");
+    printf("6. Quit\n");
 }
 
 int readInput() {
@@ -102,13 +100,6 @@ void handleUserInput(menuOptions option) {
                 int cmp = selectComparator();
                 printf("Log is sorted: %s\n", checkSortWithComp(cmp) ? "YES" : "NO");
                 break;
-        }
-        case test: {
-                test_eventLog();
-                test_eventQueue();
-                test_eventPoolRebase();
-                test_eventSort();
-            break;
         }
         case quit: {
                 appState_get()->currentOption = quit;

@@ -2,7 +2,7 @@
 #define INLAMNINGALGOS_DESIGNPATTERNS_USERINTERFACE_H
 #include <stdbool.h>
 
-typedef enum menuOptions {none, tickState, printState, sort, find, help, test, quit, maxNum}
+typedef enum menuOptions {none, tickState, printState, sort, find, help, quit, maxNum}
 menuOptions;
 typedef enum sortOptions {noSort, sort_bubble, sort_selection, sort_insertion, maxValue}
 sortOptions;

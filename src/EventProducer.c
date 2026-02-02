@@ -3,7 +3,6 @@
 #include "EventProducer.h"
 #include "Event.h"
 #include "EventConsumer.h"
-#include "TestHelpers.h"
 #include "AppState.h"
 
 Event createEvent(time_t timestamp, int sensorId, enum type type, int value) {
